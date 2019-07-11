@@ -1,7 +1,5 @@
 package com.revature;
 
-import java.util.ArrayList;
-
 public class Customer{
 	String fname;
 	String lname;
@@ -15,7 +13,9 @@ public class Customer{
 		this.userName = userName;
 		this.email = email;
 	}
-	
+	public Customer (String name){
+		this.fname = name;
+	}
 	
 	
 }
