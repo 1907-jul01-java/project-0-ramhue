@@ -4,18 +4,28 @@ public class Customer{
 	String fname;
 	String lname;
  	String userName;
-	String email;
+	String password;
 
-	public Customer(String fname, String lname, String accountNumber, String userName, String email) {
+	public Customer(String fname, String lname, String accountNumber, String userName, String password) {
 		super();
 		this.fname = fname;
 		this.lname = lname;
 		this.userName = userName;
-		this.email = email;
+		this.password = password;
 	}
-	public Customer (String name){
-		this.fname = name;
-	}
+	public Customer (String name){this.fname = name;}
+
+	public String getFname() {return fname;}
+	public void setFname(String fname) {this.fname = fname;}
+
+	public String getLname() {return lname;}
+	public void setLname(String lname) {this.lname = lname;}
+
+	public String getUserName() {return userName;}
+	public void setUserName(String userName) {this.userName = userName;}
+
+	public String getPassword() {return password;}
+	public void setPassword(String password) {this.password = password;}
 	
 	
 }
