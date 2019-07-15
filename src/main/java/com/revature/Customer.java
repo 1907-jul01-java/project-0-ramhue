@@ -6,7 +6,7 @@ public class Customer{
  	String userName;
 	String password;
 
-	public Customer(String fname, String lname, String accountNumber, String userName, String password) {
+	public Customer(String fname, String lname, String userName, String password) {
 		super();
 		this.fname = fname;
 		this.lname = lname;
@@ -26,6 +26,11 @@ public class Customer{
 
 	public String getPassword() {return password;}
 	public void setPassword(String password) {this.password = password;}
+
+	@Override
+	public String toString() {
+		return "Customer [fname=" + fname + ", lname=" + lname + ", userName=" + userName + "]";
+	}
 	
 	
 }

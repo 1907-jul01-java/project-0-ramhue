@@ -12,7 +12,7 @@ public class AccountDao implements DAO<BankAccount> {
     public void insert(BankAccount bankAccount) {
         PreparedStatement preStatement;
         try {
-            preStatement = connection.prepareStatement("INSERT INTO accounts(name, balance) VALUES(?, ?)");
+            preStatement = connection.prepareStatement("INSERT INTO accounts(nameofacct, balance) VALUES(?, ?)");
             preStatement.setString(1, bankAccount.getAccountNumber());
             preStatement.setDouble(2, bankAccount.getBalance());
             preStatement.executeUpdate();
@@ -28,10 +28,9 @@ public class AccountDao implements DAO<BankAccount> {
         try {
             Statement statement = connection.createStatement();
             ResultSet results = statement.executeQuery("SELECT * FROM accounts"); 
-            while(results.next()){
-                account = new BankAccount(null);
-                account.setAccountNumber(results.getString("name"));
-                account.setBalance(results.getFloat("balance"));
+            ResultSet results2 = results;
+            while (results2.next()) {
+                account = new BankAccount(results2.getString("nameofacct"), results2.getFloat("balance"));
                 accounts.add(account);
             }
         } catch (Exception e) {

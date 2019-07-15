@@ -1,16 +1,34 @@
 package com.revature.entities;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
-
 import com.revature.Customer;
 
 public class CustomerDoa implements DAO<Customer> {
     Connection connection;
 
+    public CustomerDoa(Connection connection){this.connection = connection;}
+    
     @Override
     public List<Customer> getAll() {
-        return null;
+        String sql = "SELECT * FROM customer";
+        Customer customer;
+        List<Customer> customers = new ArrayList();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet results = statement.executeQuery(sql);
+            while(results.next()){
+                customer = new Customer(null);
+                customer.setFname(results.getString("fname"));
+                customer.setLname(results.getString("lname"));
+                customer.setPassword(results.getString("password"));
+                customer.setUserName(results.getString("username"));
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            System.err.println("OOPS");
+        } return customers;
     }
 
     @Override

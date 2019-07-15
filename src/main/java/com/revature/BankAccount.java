@@ -2,13 +2,15 @@ package com.revature;
 
 public class BankAccount {
 	String accountNumber;
+	String accountType;
 	double balance;
 	
 
-	public BankAccount(String accountNumber) {
+	public BankAccount(String AcctType, double balance) {
 		super();
-		this.accountNumber = accountNumber;
-		this.balance = 0;
+		this.accountType = AcctType;
+		//this.accountNumber = accountNumber;
+		this.balance = balance;
 	}
 	
 	String checkBalance(){
@@ -28,7 +30,7 @@ public class BankAccount {
 	public String getAccountNumber() {return accountNumber;}
 
 	public void setAccountNumber(String accountNumber) {this.accountNumber = accountNumber;}
-	
+
 	//Account Balance getters and setters
 	public double getBalance() {return balance;}
 
