@@ -1,11 +1,14 @@
 package com.revature;
 
+import java.util.List;
+
 public class Customer{
 	String fname;
 	String lname;
  	String userName;
 	String password;
 	int customerId;
+	List<BankAccount> bankaccounts;
 
 	public Customer(String fname, String lname, String userName, String password) {
 		super();

@@ -50,7 +50,7 @@ public class AcDao implements DAO<Ac> {
     }
 
     @Override
-    public void update() {
+    public void update(int a, double b) {
 
     }
 

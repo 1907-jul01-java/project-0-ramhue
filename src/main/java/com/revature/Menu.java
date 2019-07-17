@@ -14,8 +14,7 @@ public class Menu {
 		
 		System.out.print("********************\nWELCOME!!!\n********************");
 		System.out.print("\n(L)ogin\n(N)ew User\n");
-		System.out.println("(B)alance");
-		System.out.println("(A)dmin Login");
+		//System.out.println("(A)dmin Login");
 		System.out.println("(E)xit");
 		//Scanner in = new Scanner(System.in);
 		response = in.next().charAt(0);
@@ -28,10 +27,6 @@ public class Menu {
 			case 'N':
 				CreateLogin();
 				break;
-			case 'B':{
-				CheckBalance();
-				break;
-			}
 			case 'E':{
 				return;
 			}
@@ -77,7 +72,6 @@ public class Menu {
 				acctType = in.next();
 				break;
 			default:
-
 				break;
 		}
 			while(balance <= 0.0){	
@@ -96,26 +90,53 @@ public class Menu {
 			Ac ac = new Ac(account.getAccountNumber(), customer2.getCustomerId());
 			AcDao acDoa = new AcDao(connect2.getConnection());
 			acDoa.insert(ac);
-			System.out.println(accountDoa.getAll());
 			//System.out.println(acDoa.getAll());
 	}
 
-	public void CustomerMenu(){
+	public void CustomerMenu(Customer customer){
+		boolean quit = false;
+		do{
 		System.out.println("***********************Customer Menu***********************");
-		System.out.print("What would you like to do?");
-		System.out.print("(M)y accounts\n(W)ithdraw\n(D)eposit\n(T)ransfer\n(A)pply\n(L)ogout");
+		System.out.println("What would you like to do?");
+		System.out.println("(M)y accounts\n(W)ithdraw\n(D)eposit\n(O)pen an account\n(L)ogout");
 		char response = in.next().charAt(0);
+		
 		switch (response) {
-			case 'L':
-				System.out.println("You have sucessfully logged out.");
-				MainMenu();
+			case 'M':
+				Myaccounts(customer);
+				break;
+			
+			case 'O':
+				CreateAccount(customer);
 				break;
 			case 'W':
-
-		
+				Myaccounts(customer);
+				System.out.println("Please enter an amount you wish to witdraw");
+				double amount = in.nextDouble();
+				System.out.println("Please enter the account number you want to withdraw from");
+				int acctNo = in.nextInt();
+				Withdraw(customer, amount, acctNo);
+				Myaccounts(customer);
+				break;
+				
+			case 'D':
+				Myaccounts(customer);
+				System.out.println("Please enter an amount you wish to Deposit");
+				double depAmount = in.nextDouble();
+				System.out.println("Please enter the account number you want to deposit into");
+				int acctNum = in.nextInt();
+				Deposit(customer, depAmount, acctNum);
+				Myaccounts(customer);
+				break;
+			case 'L':
+				System.out.println("You have sucessfully logged out.");
+				quit = true;
+				break;
 			default:
 				break;
 		}
+		} while(!quit);
+		
 	}
 	public void ReturnUser(){
 		System.out.println("Please Enter Your Username");
@@ -124,24 +145,64 @@ public class Menu {
 		String password = in.next();
 		ConnectionUtil connects = new ConnectionUtil();
 		CustomerDao customerDoa = new CustomerDao(connects.getConnection());
-		
-		if (customerDoa.login(name, password)){
+		Customer customer = new Customer("fname", "lname", name, password );
+
+		if (customerDoa.login(customer)){
 			System.out.println("I did it");
+			CustomerMenu(customer);
 		}
 		else{
 			System.out.println("Login failed. Wrong credentials");
 		}
-		
-		//Customer customer = new Customer(name);
-		System.out.println("Password?");
-		//String password = in.next();
+		MainMenu();
 				
 	}
-	public void CheckBalance(){
-		System.out.println("Please your account number");
-		//String input = in.next();
-		}
-	public void Withdraw(){};
-	public void Deposit(){};
+	public void Myaccounts(Customer customer){
+		ConnectionUtil connection = new ConnectionUtil();
+		AccountDao accounts = new AccountDao(connection.getConnection());
+		System.out.println("Bank Account(s) for "+ customer.getFname() + " " + customer.getLname());
+		customer.bankaccounts = accounts.getAllCustomersAccounts(customer);
+		System.out.println(customer.bankaccounts);		
+	}
+	public void Withdraw(Customer customer, double amount, int acctNo){
+		//Myaccounts(customer);
+		if (amount > 0){
+			for (int i = 0; i < customer.bankaccounts.size(); i++){
+				if (customer.bankaccounts.get(i).getAccountNumber() == acctNo){
+					if (customer.bankaccounts.get(i).getBalance() >= amount){
+						double balance = customer.bankaccounts.get(i).getBalance() - amount;
+						customer.bankaccounts.get(i).setBalance(balance);
+						System.out.println("Your new balance is " + balance);
+						ConnectionUtil connection = new ConnectionUtil();
+						AccountDao account = new AccountDao(connection.getConnection());
+						account.update(acctNo, balance);
+						break;
+					}
+					else{System.out.println("insufficient Funds");break;}
+				}else{
+					System.out.println("Wrong account Number");
+			}
+		} 
+		}else{System.out.println("invaild amount");}
+	};
+
+	public void Deposit(Customer customer, double amount, int acctNo){
+		//Myaccounts(customer);
+		if (amount > 0){
+			for (int i = 0; i < customer.bankaccounts.size(); i++){
+				if (customer.bankaccounts.get(i).getAccountNumber() == acctNo){
+						double balance = customer.bankaccounts.get(i).getBalance() + amount;
+						customer.bankaccounts.get(i).setBalance(balance);
+						System.out.println("Your new balance is " + balance);
+						ConnectionUtil connection = new ConnectionUtil();
+						AccountDao account = new AccountDao(connection.getConnection());
+						account.update(acctNo, balance);
+						break;
+					}else{
+					System.out.println("Wrong account Number");
+					}
+			}
+		}else{System.out.println("invaild amount");} 
+	}
 	public void transfer(){};
 	}

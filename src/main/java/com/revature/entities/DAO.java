@@ -9,5 +9,5 @@ public interface DAO<E>{
 
     void remove();
 
-    void update();
+    void update(int a, double b);
 }

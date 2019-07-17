@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.revature.BankAccount;
+import com.revature.Customer;
 
 public class AccountDao implements DAO<BankAccount> {
     Connection connection;
@@ -50,7 +51,32 @@ public class AccountDao implements DAO<BankAccount> {
     }
 
     @Override
-    public void update() {
+    public void update(int acctnumber, double balance) {
+        String sql = "UPDATE accounts SET balance = ? WHERE acctNo = ?";
+        try {
+            PreparedStatement pstate = connection.prepareStatement(sql);
+            pstate.setDouble(1, balance);
+            pstate.setInt(2, acctnumber);
+            pstate.executeUpdate();
+        } catch (SQLException ex) {
+            //TODO: handle exception
+        }
+    }
+    public List<BankAccount> getAllCustomersAccounts(Customer customer){
+        BankAccount account;
+        List<BankAccount> accounts = new ArrayList<>();
+        try {
+            PreparedStatement pstatement = connection.prepareStatement("SELECT  * FROM accounts a JOIN ac b ON a.acctNo = b.acctNum JOIN customer c ON c.customerid = b.custid WHERE c.customerid = ? "); 
+            pstatement.setInt(1, customer.getCustomerId());
+            ResultSet results2 = pstatement.executeQuery();
+            while (results2.next()) {
+                account = new BankAccount(results2.getString("nameofacct"), results2.getFloat("balance"),results2.getInt("acctNo"));
+                accounts.add(account);
+            }
+        } catch (Exception e) {
+        
+        }
+        return accounts;
     }
 
     public AccountDao(Connection connection){ this.connection = connection;}

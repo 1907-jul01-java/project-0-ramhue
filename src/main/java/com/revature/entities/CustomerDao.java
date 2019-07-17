@@ -58,17 +58,20 @@ public class CustomerDao implements DAO<Customer> {
     }
 
     @Override
-    public void update() {
+    public void update(int a, double b) {
 
     }
-    public boolean login(String username, String password){
+    public boolean login(Customer customer){
         try{ 
         PreparedStatement pState = connection.prepareStatement("SELECT * FROM customer WHERE userName = ? AND password = ?");
-        pState.setString(1, username);
-        pState.setString(2, password);
+        pState.setString(1, customer.getUserName());
+        pState.setString(2, customer.getPassword());
         ResultSet rs = pState.executeQuery();
         if (rs.next()){
-            System.out.println("Welcome back" + rs.getString("fname"));
+            customer.setCustomerId(rs.getInt("customerid"));
+            customer.setFname(rs.getString("fname"));
+            customer.setLname(rs.getString("lname"));
+            System.out.println("Welcome back " + customer.getFname() + " " + customer.getLname());
             return true;
         }
         else return false;

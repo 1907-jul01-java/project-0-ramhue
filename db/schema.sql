@@ -3,6 +3,11 @@ DROP TABLE IF EXISTS ta;
 DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS accounts;
+create TABLE admin(
+    adminId SERIAL PRIMARY KEY,
+    adminusername TEXT,
+    adminpassword Text
+);
 create TABLE accounts(
     acctNo SERIAL PRIMARY KEY,
     nameOfacct TEXT,
