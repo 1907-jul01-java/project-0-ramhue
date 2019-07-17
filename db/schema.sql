@@ -4,43 +4,43 @@ DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS accounts;
 create TABLE accounts(
-    acctNo serial ,
+    acctNo SERIAL PRIMARY KEY,
     nameOfacct TEXT,
-    balance FLOAT,
-    PRIMARY KEY(acctNo)
+    balance FLOAT
     );
 CREATE TABLE customer(
-    userName TEXT ,
+    customerid SERIAL PRIMARY KEY,
+    userName TEXT UNIQUE,
     password TEXT,
-    fname TEXT,
-    lname TEXT,
-    PRIMARY KEY (userName)
+    fname  TEXT,
+    lname TEXT
 );
 CREATE TABLE transactions(
-    id SERIAL,
+    tracid SERIAL,
     ammount FLOAT,
     kindofTrans TEXT,
     timetable TIMESTAMP,
-    PRIMARY KEY (id)
+    PRIMARY KEY (tracid)
 );
 CREATE TABLE ac(
-    ID int, 
-    usrname TEXT,
-    acctNum SERIAL, 
+    ID SERIAL, 
+    acctNum INT, 
+    custid INT,
     PRIMARY KEY (ID),
-    FOREIGN KEY (usrname) REFERENCES customer(userName) ON DELETE CASCADE,
+    FOREIGN KEY (custid) REFERENCES customer(customerid) ON DELETE CASCADE,
     FOREIGN KEY (acctNum) REFERENCES accounts(acctNo) ON DELETE CASCADE
 
 );
 CREATE TABLE ta(
-    accNo SERIAL,
+    taID SERIAL,
     transid SERIAL,
-    PRIMARY KEY(accNo, transid),
+    accNo INT,
+    PRIMARY KEY(taID),
     FOREIGN KEY (accNo) REFERENCES accounts(acctNo) ON DELETE CASCADE,
-    FOREIGN KEY (transid) REFERENCES transactions(id) ON DELETE CASCADE
+    FOREIGN KEY (transid) REFERENCES transactions(tracid) ON DELETE CASCADE
 
 );
 
-INSERT INTO accounts(nameOfacct,balance) VALUES('Savings', 0.0);
+/*INSERT INTO accounts(nameOfacct,balance) VALUES('Savings', 0.0);
 SELECT * FROM accounts;
-SELECT * FROM transactions;
+SELECT * FROM transactions;*/

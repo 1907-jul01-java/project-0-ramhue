@@ -12,10 +12,15 @@ public class AccountDao implements DAO<BankAccount> {
     public void insert(BankAccount bankAccount) {
         PreparedStatement preStatement;
         try {
-            preStatement = connection.prepareStatement("INSERT INTO accounts(nameofacct, balance) VALUES(?, ?)");
-            preStatement.setString(1, bankAccount.getAccountNumber());
+            preStatement = connection.prepareStatement("INSERT INTO accounts(nameofacct, balance) VALUES(?, ?)", Statement.RETURN_GENERATED_KEYS);
+            preStatement.setString(1, bankAccount.getAccountType());
             preStatement.setDouble(2, bankAccount.getBalance());
             preStatement.executeUpdate();
+            ResultSet addAccountResults = preStatement.getGeneratedKeys();
+            if(addAccountResults.next()){
+                bankAccount.setAccountNumber(addAccountResults.getInt(1));
+            }
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -30,7 +35,7 @@ public class AccountDao implements DAO<BankAccount> {
             ResultSet results = statement.executeQuery("SELECT * FROM accounts"); 
             ResultSet results2 = results;
             while (results2.next()) {
-                account = new BankAccount(results2.getString("nameofacct"), results2.getFloat("balance"));
+                account = new BankAccount(results2.getString("nameofacct"), results2.getFloat("balance"),results2.getInt("acctNo"));
                 accounts.add(account);
             }
         } catch (Exception e) {
@@ -49,4 +54,5 @@ public class AccountDao implements DAO<BankAccount> {
     }
 
     public AccountDao(Connection connection){ this.connection = connection;}
+
 }

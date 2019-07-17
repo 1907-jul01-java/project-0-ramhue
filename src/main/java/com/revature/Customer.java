@@ -5,6 +5,7 @@ public class Customer{
 	String lname;
  	String userName;
 	String password;
+	int customerId;
 
 	public Customer(String fname, String lname, String userName, String password) {
 		super();
@@ -12,6 +13,8 @@ public class Customer{
 		this.lname = lname;
 		this.userName = userName;
 		this.password = password;
+		this.customerId = -1;
+
 	}
 	public Customer (String name){this.fname = name;}
 
@@ -27,10 +30,16 @@ public class Customer{
 	public String getPassword() {return password;}
 	public void setPassword(String password) {this.password = password;}
 
+	public int getCustomerId() {return customerId;}
+
+	public void setCustomerId(int customerId) {this.customerId = customerId;}
+
 	@Override
 	public String toString() {
 		return "Customer [fname=" + fname + ", lname=" + lname + ", userName=" + userName + "]";
 	}
+
+	
 	
 	
 }

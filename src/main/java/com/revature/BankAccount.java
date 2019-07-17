@@ -1,15 +1,15 @@
 package com.revature;
 
 public class BankAccount {
-	String accountNumber;
+	int accountNumber;
 	String accountType;
 	double balance;
 	
 
-	public BankAccount(String AcctType, double balance) {
+	public BankAccount(String AcctType, double balance, int acctNum) {
 		super();
 		this.accountType = AcctType;
-		//this.accountNumber = accountNumber;
+		this.accountNumber = acctNum;
 		this.balance = balance;
 	}
 	
@@ -27,18 +27,24 @@ public class BankAccount {
 		}
 	}
 	//AccountNumber getters and setters
-	public String getAccountNumber() {return accountNumber;}
+	public int getAccountNumber() {return accountNumber;}
 
-	public void setAccountNumber(String accountNumber) {this.accountNumber = accountNumber;}
+	public void setAccountNumber(int accountNumber) {this.accountNumber = accountNumber;}
 
 	//Account Balance getters and setters
 	public double getBalance() {return balance;}
 
 	public void setBalance(double balance) {this.balance = balance;}
 
-	//toString method
+
+
+	public String getAccountType() {return accountType;}
+
+	public void setAccountType(String accountType) {this.accountType = accountType;}
+
 	@Override
 	public String toString() {
-		return "BankAccount [accountNumber=" + accountNumber + ", balance=" + balance + "]";
+		return "BankAccount [accountNumber=" + accountNumber + ", accountType=" + accountType + ", balance=" + balance
+				+ "]";
 	}
 }

@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import com.revature.Customer;
 
-public class CustomerDoa implements DAO<Customer> {
+
+
+public class CustomerDao implements DAO<Customer> {
     Connection connection;
 
-    public CustomerDoa(Connection connection){this.connection = connection;}
+    public CustomerDao(Connection connection){this.connection = connection;}
     
     @Override
     public List<Customer> getAll() {
@@ -35,14 +37,18 @@ public class CustomerDoa implements DAO<Customer> {
     public void insert(Customer customer) {
         PreparedStatement preStatement;
         try {
-            preStatement = connection.prepareStatement("INSERT INTO customer(userName, password, fname, lname) VALUES(?,?,?,?)");
+            preStatement = connection.prepareStatement("INSERT INTO customer(userName, password, fname, lname) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             preStatement.setString(1, customer.getUserName());
             preStatement.setString(2, customer.getPassword());
             preStatement.setString(3, customer.getFname());
             preStatement.setString(4, customer.getLname());
             preStatement.executeUpdate();
+            ResultSet addUserResults = preStatement.getGeneratedKeys();
+            if(addUserResults.next())
+                customer.setCustomerId(addUserResults.getInt(1));
         }catch(SQLException e){
             System.err.println("Something went wrong and could not insert customer");
+
         }
     }
 
@@ -54,6 +60,22 @@ public class CustomerDoa implements DAO<Customer> {
     @Override
     public void update() {
 
+    }
+    public boolean login(String username, String password){
+        try{ 
+        PreparedStatement pState = connection.prepareStatement("SELECT * FROM customer WHERE userName = ? AND password = ?");
+        pState.setString(1, username);
+        pState.setString(2, password);
+        ResultSet rs = pState.executeQuery();
+        if (rs.next()){
+            System.out.println("Welcome back" + rs.getString("fname"));
+            return true;
+        }
+        else return false;
+        }catch(SQLException ex){
+            System.err.println("Someting went wrong");
+        }
+        return false;
     }
     
 }
